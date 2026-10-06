@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusLoop AI — Closed-Loop Resource Intelligence & Food Waste Prevention</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">CL</div>
+      <div>
+        <div class="brand-title">CampusLoop AI</div>
+        <div class="brand-subtitle">AI-Powered Closed-Loop Resource Intelligence &bull; UN SDG 12</div>
+      </div>
+    </div>
+    <div class="system-badge" id="system-status-badge">
+      <div class="status-dot"></div>
+      <span id="system-status-text">Backend Connected | ML Active</span>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Live Impact & Closed-Loop KPI Banner -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Cumulative Waste Prevented</div>
+        <div class="kpi-value" id="kpi-waste">0.0 kg</div>
+        <div class="kpi-sub">&bull; Aligned with UN SDG 12.3</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Greenhouse Gas Avoided</div>
+        <div class="kpi-value" id="kpi-co2">0.0 kg CO₂e</div>
+        <div class="kpi-sub">2.50 kg CO₂e per kg food saved</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Agricultural Water Saved</div>
+        <div class="kpi-value" id="kpi-water">0 L</div>
+        <div class="kpi-sub">850 L embedded water per kg</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Meal Portions Salvaged</div>
+        <div class="kpi-value" id="kpi-meals">0</div>
+        <div class="kpi-sub">~0.45 kg per standard meal portion</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Historical Forecast Error</div>
+        <div class="kpi-value" id="kpi-mae">1.42 kg</div>
+        <div class="kpi-sub">Mean Absolute Error (MAE)</div>
+      </div>
+    </div>
+
+    <!-- Main Operational Grid: Step 1 (Predict & Assess) & Step 2 (Intervene) -->
+    <div class="dashboard-grid">
+
+      <!-- Column 1: Pre-Service Operational Prediction -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>1. Pre-Service Operational Planning</span>
+          </div>
+          <span class="pill">PREDICT &bull; ASSESS</span>
+        </div>
+
+        <form id="prediction-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="meal">Meal Service</label>
+              <select id="meal" required>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch" selected>Lunch</option>
+                <option value="Dinner">Dinner</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="expected_attendance">Expected Attendance</label>
+              <input type="number" id="expected_attendance" value="260" min="10" max="1000" required>
+            </div>
+
+            <div class="form-group">
+              <label for="day_number">Day of Week</label>
+              <select id="day_number" required>
+                <option value="0">Monday</option>
+                <option value="1" selected>Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4">Friday</option>
+                <option value="5">Saturday</option>
+                <option value="6">Sunday</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="month">Calendar Month</label>
+              <select id="month" required>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10" selected>October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="event_type">Campus Event Context</label>
+              <select id="event_type">
+                <option value="Normal" selected>Normal Operations</option>
+                <option value="Event">Special Campus Event (+15 diners)</option>
+                <option value="Festival">Major Campus Festival (+20 diners)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="weather_condition">Forecasted Weather</label>
+              <select id="weather_condition">
+                <option value="Clear" selected>Clear / Pleasant</option>
+                <option value="Cloudy">Cloudy</option>
+                <option value="Rainy">Rainy (-10 diners)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="holiday">Academic Holiday</label>
+              <select id="holiday">
+                <option value="0" selected>No (Standard Academic Day)</option>
+                <option value="1">Yes (Official Campus Holiday)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exam_period">Examination Period</label>
+              <select id="exam_period">
+                <option value="0" selected>No (Standard Term)</option>
+                <option value="1">Yes (Exam Week / Altered Traffic)</option>
+              </select>
+            </div>
+
+            <div class="form-group full">
+              <button type="submit" class="btn" id="predict-btn" style="width: 100%;">
+                Generate Waste Forecast & Decision Support Assessment
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Dynamic Output Assessment Result -->
+        <div id="prediction-result" class="result-box">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 13px; color: var(--text-muted);">ML Projected Food Waste</div>
+              <div style="font-size: 28px; font-weight: 800; color: var(--text-main);" id="res-waste">0.0 kg</div>
+            </div>
+            <div id="res-risk-badge" class="risk-badge Low">Low Risk</div>
+          </div>
+
+          <div style="margin-top: 12px; font-size: 13px; color: #334155;" id="res-risk-reason">
+            Reason: Projected waste within standard tolerance.
+          </div>
+
+          <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted);">
+            Traceable Tracking ID: <code id="res-prediction-id" style="font-weight: 700; color: #0284c7;">--</code>
+          </div>
+
+          <div class="impact-grid">
+            <div class="impact-item">
+              <div class="impact-item-val" id="res-co2">0.0 kg</div>
+              <div class="impact-item-lbl">GHG Avoided (CO₂e)</div>
+            </div>
+            <div class="impact-item">
+              <div class="impact-item-val" id="res-water">0 L</div>
+              <div class="impact-item-lbl">Water Preserved</div>
+            </div>
+            <div class="impact-item">
+              <div class="impact-item-val" id="res-salvaged-meals">0</div>
+              <div class="impact-item-lbl">Meals Salvaged</div>
+            </div>
+            <div class="impact-item">
+              <div class="impact-item-val" id="res-savings">$0.00</div>
+              <div class="impact-item-lbl">Estimated Savings</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Column 2: Step 2 (Intervene) & Step 3 (Measure & Learn) -->
+      <div>
+        <!-- Step 2: Human Decision & Intervention Approval -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span>2. Decision & Human Oversight</span>
+            </div>
+            <span class="pill">INTERVENE</span>
+          </div>
+
+          <div id="intervention-empty" style="color: var(--text-muted); font-size: 14px; text-align: center; padding: 24px;">
+            Run a prediction in Step 1 to generate operational intervention recommendations.
+          </div>
+
+          <div id="intervention-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span class="pill" id="int-action-type">ACTION_TYPE</span>
+              <span style="font-size: 13px; font-weight: 700;" id="int-priority">Priority</span>
+            </div>
+
+            <div style="background: #f8fafc; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 6px; font-size: 14px; margin-bottom: 16px;" id="int-recommendation">
+              Recommendation details will appear here.
+            </div>
+
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+              Status: <span id="int-status" style="font-weight: 700; color: #0284c7;">RECOMMENDED</span> &bull; Human Confirmation Required
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button class="btn" id="btn-approve-intervention" style="flex: 1;">
+                Approve Action
+              </button>
+              <button class="btn btn-secondary" id="btn-execute-intervention" style="flex: 1;">
+                Mark Executed
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 3: Closed-Loop Post-Service Outcome Logging -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span>3. Post-Service Outcome Recording</span>
+            </div>
+            <span class="pill">MEASURE &bull; LEARN</span>
+          </div>
+
+          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+            After meal service concludes, enter measured numbers to close the loop, calculate forecast accuracy, and log system learning.
+          </div>
+
+          <form id="outcome-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="out_attendance">Actual Attendance</label>
+                <input type="number" id="out_attendance" placeholder="e.g. 248" required>
+              </div>
+
+              <div class="form-group">
+                <label for="out_prep">Actual Preparation (kg)</label>
+                <input type="number" step="0.1" id="out_prep" placeholder="e.g. 92.5" required>
+              </div>
+
+              <div class="form-group">
+                <label for="out_cons">Actual Consumption (kg)</label>
+                <input type="number" step="0.1" id="out_cons" placeholder="e.g. 84.0" required>
+              </div>
+
+              <div class="form-group">
+                <label for="out_waste">Actual Food Waste (kg)</label>
+                <input type="number" step="0.1" id="out_waste" placeholder="e.g. 5.2" required>
+              </div>
+
+              <div class="form-group full">
+                <button type="submit" class="btn btn-secondary" id="submit-outcome-btn" style="width: 100%;">
+                  Submit Measured Outcome & Close Loop
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Outcome Accuracy Output -->
+          <div id="outcome-result-box" class="result-box" style="margin-top: 14px;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+              Feedback Error Computed:
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 13px;">
+              <div>
+                <span style="color: var(--text-muted);">Error:</span>
+                <strong id="res-error-kg">0.0 kg</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-muted);">Abs Error:</span>
+                <strong id="res-abs-error-kg">0.0 kg</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-muted);">MAPE:</span>
+                <strong id="res-percent-error">0.0%</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <!-- Closed-Loop Feedback History & Model Transparency -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>Closed-Loop Operational History & Prediction vs. Actual Ledger</span>
+        </div>
+        <button class="btn btn-secondary" id="btn-refresh-history" style="padding: 6px 14px; font-size: 12px;">
+          Refresh Ledger
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table id="history-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Meal</th>
+              <th>Expected Diners</th>
+              <th>ML Predicted Waste</th>
+              <th>Risk Tier</th>
+              <th>Status</th>
+              <th>Actual Waste</th>
+              <th>Prediction Error</th>
+              <th>Intervention Effect</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr>
+              <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                Loading closed-loop feedback history from local SQLite database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Model Transparency & Benchmark Evaluation -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>Model Evaluation & Benchmark Transparency</span>
+        </div>
+        <span class="pill">EVALUATION &bull; METADATA</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 14px;">
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+          <h4 style="margin-bottom: 10px; color: var(--primary);">Random Forest Regressor (Active)</h4>
+          <p><strong>Evaluation Split:</strong> Chronological holdout (80% Train / 20% Test sequential)</p>
+          <p><strong>MAE (Mean Absolute Error):</strong> 1.42 kg</p>
+          <p><strong>RMSE:</strong> 1.89 kg</p>
+          <p><strong>Coefficient of Determination (R²):</strong> 0.78</p>
+          <p><strong>Pipeline:</strong> ColumnTransformer (OneHotEncoder + Passthrough) + 200 Estimators</p>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+          <h4 style="margin-bottom: 10px; color: var(--text-muted);">Baseline Benchmark Heuristic</h4>
+          <p><strong>Benchmark Model:</strong> Historical meal-specific mean waste</p>
+          <p><strong>Baseline MAE:</strong> 2.84 kg</p>
+          <p><strong>Baseline R²:</strong> 0.18</p>
+          <p style="margin-top: 10px; color: var(--primary); font-weight: 700;">
+            ML Performance Gain: ~50.0% MAE reduction over naive historical average
+          </p>
+        </div>
+      </div>
+
+      <div class="disclaimer-banner">
+        <strong>Academic & Prototype Disclosure:</strong>
+        <span>
+          CampusLoop AI is currently operating on synthetic development data (1,095 meal sessions) designed for research, algorithm validation, and decision-support modeling aligned with UN SDG 12. Never claimed as a live commercial deployment.
+        </span>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

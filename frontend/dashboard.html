@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#153d32">
+  <title>CampusLoop | Meal planning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="CampusLoop home">
+      <span class="brand-mark" aria-hidden="true">C</span>
+      <span class="brand-copy"><strong>CampusLoop</strong><span>Campus dining</span></span>
+    </a>
+    <div class="connection" id="connection-status" role="status">
+      <span class="connection-dot" aria-hidden="true"></span>
+      <span id="connection-label">Checking system</span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow"><span class="eyebrow-line"></span>MEAL PLANNING</p>
+      <h1 id="page-title">Before the next service</h1>
+      <p class="intro-copy">A quick waste estimate to help the kitchen plan. Your team makes the final call.</p>
+    </section>
+
+    <div class="workbench">
+      <section class="panel input-panel" aria-labelledby="setup-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">PLAN A SERVICE</p>
+            <h2 id="setup-title">Service details</h2>
+          </div>
+        </div>
+
+        <form id="prediction-form">
+          <div class="field-block">
+            <label for="meal">Meal service</label>
+            <select id="meal" name="meal" required>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch" selected>Lunch</option>
+              <option value="Dinner">Dinner</option>
+            </select>
+          </div>
+
+          <div class="field-block attendance-field">
+            <label for="expected_attendance">Expected diners</label>
+            <div class="number-wrap">
+              <input id="expected_attendance" name="expected_attendance" type="number" min="1" max="10000" value="260" required>
+              <span>people</span>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-block">
+              <label for="day_number">Day</label>
+              <select id="day_number" name="day_number" required>
+                <option value="0">Monday</option><option value="1">Tuesday</option>
+                <option value="2">Wednesday</option><option value="3">Thursday</option>
+                <option value="4">Friday</option><option value="5">Saturday</option>
+                <option value="6">Sunday</option>
+              </select>
+            </div>
+            <div class="field-block">
+              <label for="month">Month</label>
+              <select id="month" name="month" required>
+                <option value="1">January</option><option value="2">February</option>
+                <option value="3">March</option><option value="4">April</option>
+                <option value="5">May</option><option value="6">June</option>
+                <option value="7">July</option><option value="8">August</option>
+                <option value="9">September</option><option value="10">October</option>
+                <option value="11">November</option><option value="12">December</option>
+              </select>
+            </div>
+          </div>
+
+          <details class="more-options">
+            <summary>Campus conditions <span>Optional</span></summary>
+            <div class="field-row condition-row">
+              <div class="field-block">
+                <label for="event_type">Campus activity</label>
+                <select id="event_type" name="event_type">
+                  <option value="Normal">Typical day</option>
+                  <option value="Event">Campus event</option>
+                  <option value="Festival">Major festival</option>
+                </select>
+              </div>
+              <div class="field-block">
+                <label for="weather_condition">Weather</label>
+                <select id="weather_condition" name="weather_condition">
+                  <option value="Clear">Clear</option>
+                  <option value="Cloudy">Cloudy</option>
+                  <option value="Rainy">Rainy</option>
+                </select>
+              </div>
+            </div>
+            <div class="check-row">
+              <label><input type="checkbox" id="holiday" name="holiday" value="1"> Campus holiday</label>
+              <label><input type="checkbox" id="exam_period" name="exam_period" value="1"> Exam period</label>
+            </div>
+          </details>
+
+          <button class="primary-button" type="submit" id="forecast-button">
+            <span id="button-label">Generate forecast</span>
+            <span class="button-arrow" aria-hidden="true">→</span>
+          </button>
+          <p class="form-footnote">Use this as a planning estimate. It does not replace staff judgement.</p>
+          <p class="form-message" id="form-message" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <section class="panel result-panel" aria-labelledby="result-title" aria-live="polite">
+        <div class="result-topline">
+          <div>
+            <p class="eyebrow">PLANNING ESTIMATE</p>
+            <h2 id="result-title">Waste forecast</h2>
+          </div>
+        </div>
+
+        <div class="empty-state" id="forecast-empty">
+          <p class="empty-title">No forecast yet</p>
+          <p class="empty-copy">Choose a meal and enter the expected diners. Your estimate will appear here.</p>
+        </div>
+
+        <div class="forecast-content" id="forecast-content" hidden>
+          <div class="result-meta">
+            <p id="service-label">Lunch · Tuesday</p>
+            <span class="risk-pill" id="risk-pill" data-risk="Low">Low risk</span>
+          </div>
+
+          <div class="waste-reading">
+            <span class="waste-number" id="predicted-waste">--</span>
+            <span class="waste-unit">kg</span>
+          </div>
+          <p class="reading-caption">estimated food waste</p>
+          <p class="risk-explanation" id="risk-explanation"></p>
+
+          <div class="recommendation">
+            <p class="eyebrow">SUGGESTED NEXT STEP</p>
+            <p class="recommendation-text" id="recommended-action"></p>
+          </div>
+
+          <div class="staff-action" id="staff-action" hidden>
+            <div class="staff-action-copy">
+              <p class="eyebrow">STAFF FOLLOW-UP</p>
+              <p id="intervention-status">Awaiting staff review</p>
+            </div>
+            <label class="staff-name-label" for="staff-name">Recorded by</label>
+            <input id="staff-name" name="staff-name" type="text" maxlength="100" autocomplete="name" placeholder="Enter staff name">
+            <div class="staff-buttons">
+              <button class="quiet-button" id="approve-action" type="button">Approve</button>
+              <button class="quiet-button quiet-button-primary" id="execute-action" type="button">Mark completed</button>
+            </div>
+            <p class="action-message" id="action-message" role="status" hidden></p>
+          </div>
+
+          <div class="impact-heading">
+            <h3>Illustrative savings</h3>
+            <span>at 20% less waste</span>
+          </div>
+          <div class="impact-grid">
+            <div class="impact-item">
+              <span class="impact-value" id="impact-prevented">--</span>
+              <span class="impact-label">less food wasted</span>
+            </div>
+            <div class="impact-item">
+              <span class="impact-value" id="impact-carbon">--</span>
+              <span class="impact-label">kg CO₂e saved</span>
+            </div>
+            <div class="impact-item">
+              <span class="impact-value" id="impact-water">--</span>
+              <span class="impact-label">litres of water saved</span>
+            </div>
+          </div>
+          <p class="estimate-note">Example only. Actual savings depend on what is prevented.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="follow-up" aria-labelledby="follow-up-title">
+      <div class="follow-up-heading">
+        <div>
+          <p class="eyebrow">AFTER SERVICE</p>
+          <h2 id="follow-up-title">Record what happened</h2>
+          <p>Compare the estimate with measured leftovers and keep a simple service history.</p>
+        </div>
+        <button class="text-button" id="refresh-history" type="button">Refresh history</button>
+      </div>
+
+      <div class="follow-up-grid">
+        <section class="follow-up-column" aria-labelledby="actuals-title">
+          <h3 id="actuals-title">Measured results</h3>
+          <p class="selected-prediction" id="selected-prediction">Generate a forecast or select one from the history.</p>
+          <form id="outcome-form">
+            <div class="outcome-fields">
+              <div class="field-block">
+                <label for="out-attendance">Actual diners</label>
+                <input id="out-attendance" name="actual_attendance" type="number" min="0" max="10000" required>
+              </div>
+              <div class="field-block">
+                <label for="out-preparation">Prepared (kg)</label>
+                <input id="out-preparation" name="actual_preparation" type="number" min="0" step="0.1" required>
+              </div>
+              <div class="field-block">
+                <label for="out-consumption">Consumed (kg)</label>
+                <input id="out-consumption" name="actual_consumption" type="number" min="0" step="0.1" required>
+              </div>
+              <div class="field-block">
+                <label for="out-waste">Left over (kg)</label>
+                <input id="out-waste" name="actual_waste" type="number" min="0" step="0.1" required>
+              </div>
+            </div>
+            <button class="quiet-button quiet-button-primary submit-outcome" id="submit-outcome" type="submit">Save measured results</button>
+            <p class="form-message" id="outcome-message" role="status" hidden></p>
+          </form>
+          <div class="outcome-summary" id="outcome-summary" hidden></div>
+        </section>
+
+        <section class="follow-up-column history-column" aria-labelledby="history-title">
+          <h3 id="history-title">Recent forecasts</h3>
+          <div class="history-list" id="history-list" aria-live="polite">
+            <p class="history-empty">Forecasts will appear here after you run one.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>CampusLoop <span class="footer-divider">/</span> Meal planning</span>
+      <span>Research estimate, trained on synthetic dining data</span>
+    </footer>
+  </main>
+  <script src="/assets/dashboard.js" defer></script>
+</body>
+</html>

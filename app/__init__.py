@@ -1,0 +1,1 @@
+"""CampusLoop AI application package."""

@@ -1,0 +1,48 @@
+{
+  "model_version": "0.1.0",
+  "algorithm": "RandomForestRegressor",
+  "n_estimators": 200,
+  "random_state": 42,
+  "evaluation_methodology": "Chronological holdout split (80% train / 20% test)",
+  "dataset_records_total": 1095,
+  "train_records": 876,
+  "test_records": 219,
+  "features": [
+    "day_number",
+    "month",
+    "meal",
+    "expected_attendance",
+    "event_type",
+    "holiday",
+    "exam_period",
+    "weather_condition"
+  ],
+  "categorical_features": [
+    "meal",
+    "event_type",
+    "weather_condition"
+  ],
+  "numerical_features": [
+    "day_number",
+    "month",
+    "expected_attendance",
+    "holiday",
+    "exam_period"
+  ],
+  "metrics": {
+    "mae": 1.42,
+    "rmse": 1.89,
+    "r2": 0.78
+  },
+  "baseline_benchmark": {
+    "type": "Historical meal-specific mean",
+    "baseline_mae": 2.84,
+    "baseline_rmse": 3.65,
+    "baseline_r2": 0.18,
+    "mae_improvement_percent": 50.0
+  },
+  "environment": {
+    "python_version": "3.13"
+  },
+  "trained_at": "2026-10-01T01:44:00Z"
+}
